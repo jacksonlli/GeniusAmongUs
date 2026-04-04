@@ -121,6 +121,20 @@ class QuizGame(commands.Cog):
             await interaction.response.send_message("You're already registered!", ephemeral=True)
             return
 
+        # Check if nickname is already taken
+        for player_data in self.registered_players.values():
+            if player_data["nickname"].lower() == nickname.lower():
+                await interaction.response.send_message(f"❌ Nickname '{nickname}' is already taken! Please choose a different one.", ephemeral=True)
+                return
+
+        self.registered_players[user_id] = {
+            "name": user_name,
+            "nickname": nickname,
+            "role": None,  # Will be assigned when game starts
+            "points": 0
+        }
+
+
         self.registered_players[user_id] = {
             "name": user_name,
             "nickname": nickname,
