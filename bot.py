@@ -587,7 +587,7 @@ class QuizGame(commands.Cog):
         current_scores = "\n".join(
             f"• **{data['nickname']}** — {data['points']} pts" for data in self.registered_players.values()
         )
-        embed.add_field(name="Current Points", value=current_scores or "No players", inline=False)
+        embed.add_field(name=f"Current Points ({{self.win_threshold}} to win)", value=current_scores or "No players", inline=False)
 
         if hasattr(self, '_last_channel'):
             channel = self._last_channel
