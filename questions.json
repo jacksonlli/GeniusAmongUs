@@ -1,0 +1,438 @@
+[
+  { "id": 1, "question": "How many kilometers long is the Great Wall of China?", "answer": 21196 },
+  { "id": 2, "question": "How many windows are on the Empire State Building?", "answer": 6514 },
+  { "id": 3, "question": "How many kilometers long is the Amazon River?", "answer": 6400 },
+  { "id": 4, "question": "How many seconds does it take for light to travel from the Sun to Earth?", "answer": 499 },
+  { "id": 5, "question": "How many hairs are on the average human head?", "answer": 100000 },
+
+  { "id": 6, "question": "How many times per minute does the average human heart beat at rest?", "answer": 72 },
+  { "id": 7, "question": "How many kilometers is the diameter of Earth?", "answer": 12742 },
+  { "id": 8, "question": "How many kilometers wide is the Pacific Ocean at its widest point?", "answer": 19000 },
+  { "id": 9, "question": "How many liters of water are in an Olympic swimming pool?", "answer": 2500000 },
+  { "id": 10, "question": "How many meters tall is Mount Everest?", "answer": 8849 },
+
+  { "id": 11, "question": "How many meters is the average depth of the ocean?", "answer": 3700 },
+  { "id": 12, "question": "How many people live in Tokyo metropolitan area?", "answer": 37000000 },
+  { "id": 13, "question": "How many kilometers long is the Nile River?", "answer": 6650 },
+  { "id": 14, "question": "How many tons does the Eiffel Tower weigh?", "answer": 10100 },
+  { "id": 15, "question": "How many goals were scored in total during the 2018 FIFA World Cup?", "answer": 169 },
+
+  { "id": 16, "question": "How many milliseconds does it take for a human to blink?", "answer": 300 },
+  { "id": 17, "question": "How many kilometers per hour is the cruising speed of a commercial airplane?", "answer": 900 },
+  { "id": 18, "question": "How many gigabytes is the average modern AAA video game size?", "answer": 80 },
+  { "id": 19, "question": "How many followers does the most followed Instagram account have (approximate)?", "answer": 600000000 },
+  { "id": 20, "question": "How many kilometers long is the coastline of Canada?", "answer": 202080 },
+
+  { "id": 21, "question": "How many hours long is the longest movie ever made (Logistics)?", "answer": 857 },
+  { "id": 22, "question": "How many people live in New York City (five boroughs, approximate)?", "answer": 8300000 },
+  { "id": 23, "question": "How many pages are in the average novel?", "answer": 300 },
+  { "id": 24, "question": "How many emails are sent worldwide per day?", "answer": 333000000000 },
+  { "id": 25, "question": "How many kilometers long is the human circulatory system?", "answer": 100000 },
+
+  { "id": 26, "question": "How many kilograms does an average car weigh?", "answer": 1500 },
+  { "id": 27, "question": "How many kilometers per hour can a peregrine falcon reach in a dive?", "answer": 320 },
+  { "id": 28, "question": "How many songs are on Spotify (approximate)?", "answer": 100000000 },
+  { "id": 29, "question": "How many hours of video are uploaded to YouTube every minute?", "answer": 500 },
+  { "id": 30, "question": "How many kilometers is the diameter of Jupiter?", "answer": 139820 },
+
+  { "id": 31, "question": "How many years did it take to build the Great Pyramid of Giza?", "answer": 20 },
+  { "id": 32, "question": "How many square meters is the surface area of a tennis court (singles)?", "answer": 260 },
+  { "id": 33, "question": "How many kilometers long is the border between the USA and Canada?", "answer": 8891 },
+  { "id": 34, "question": "How many liters of air does a human breathe per day?", "answer": 11000 },
+  { "id": 35, "question": "How many frames per second are used in standard film?", "answer": 24 },
+
+  { "id": 36, "question": "How many kilometers is the average distance a person walks in a lifetime?", "answer": 120000 },
+  { "id": 37, "question": "How many miles long is the Amazon rainforest (approximate)?", "answer": 3980 },
+  { "id": 38, "question": "How many kilometers per second is the speed of Earth orbiting the Sun?", "answer": 30 },
+  { "id": 39, "question": "How many hours does it take to fly non-stop from New York to Sydney?", "answer": 20 },
+  { "id": 40, "question": "How many milliseconds is the average human reaction time?", "answer": 250 },
+
+  { "id": 41, "question": "How many soldiers fought in the Battle of Waterloo (combined forces)?", "answer": 190000 },
+  { "id": 42, "question": "How many years did the Roman Empire last (from Augustus to fall of Western Empire)?", "answer": 503 },
+  { "id": 43, "question": "How many people died during World War I?", "answer": 17000000 },
+  { "id": 44, "question": "How many kilometers long was the Berlin Wall?", "answer": 155 },
+  { "id": 45, "question": "How many years ago were the first pyramids of Egypt built?", "answer": 4500 },
+
+  { "id": 46, "question": "How many liters of blood does the human heart pump per day?", "answer": 7500 },
+  { "id": 47, "question": "How many beats does the average human heart make per day?", "answer": 100000 },
+  { "id": 48, "question": "How many bottles of wine are produced in France per year (millions)?", "answer": 1200 },
+  { "id": 49, "question": "How many breaths does an average human take per day?", "answer": 20000 },
+  { "id": 50, "question": "How many people visit Disneyland per year (approximate, millions)?", "answer": 18 },
+
+  { "id": 51, "question": "How many calories are in a large pizza (approximate)?", "answer": 2200 },
+  { "id": 52, "question": "How many minutes does it take to watch a typical movie?", "answer": 120 },
+  { "id": 53, "question": "How many grains of rice are in a cup (approximate)?", "answer": 8000 },
+  { "id": 54, "question": "How many countries are in Africa?", "answer": 54 },
+  { "id": 55, "question": "How many acres is Central Park in New York City?", "answer": 843 },
+
+  { "id": 56, "question": "How many minutes long is the movie Avengers: Endgame?", "answer": 181 },
+  { "id": 57, "question": "How many dollars did Avatar gross worldwide (in millions)?", "answer": 2923 },
+  { "id": 58, "question": "How many films are in the Marvel Cinematic Universe?", "answer": 35 },
+  { "id": 59, "question": "How many minutes long is the movie Oppenheimer?", "answer": 180 },
+  { "id": 60, "question": "How many Oscars did Titanic win?", "answer": 11 },
+
+  { "id": 61, "question": "How many kilometers does a marathon cover?", "answer": 42.195 },
+  { "id": 62, "question": "How many games are played in a full NBA regular season per team?", "answer": 82 },
+  { "id": 63, "question": "How many players are on an Olympic soccer roster?", "answer": 18 },
+  { "id": 64, "question": "How many seconds is the world record for the 100m sprint (men)?", "answer": 9.58 },
+  { "id": 65, "question": "How many Grand Slam titles has Roger Federer won?", "answer": 20 },
+
+  { "id": 66, "question": "How many minutes long is the average pop song?", "answer": 3 },
+  { "id": 67, "question": "How many albums has Taylor Swift released (studio albums)?", "answer": 11 },
+  { "id": 68, "question": "How many streams does the most streamed song on Spotify have?", "answer": 3500000000 },
+  { "id": 69, "question": "How many strings on average does a piano have?", "answer": 230 },
+  { "id": 70, "question": "How many decibels is considered the threshold of pain for human hearing?", "answer": 130 },
+  
+  { "id": 71, "question": "How many Pokémon species exist (as of recent generations)?", "answer": 1025 },
+  { "id": 72, "question": "How many episodes are there in Detective Conan (as of recent count)?", "answer": 1100 },
+  { "id": 73, "question": "How many chapters are in Journey to the West?", "answer": 100 },
+  { "id": 74, "question": "How many years did the Zhou Dynasty last?", "answer": 790 },
+  { "id": 75, "question": "What is the highest possible score in a single game of bowling?", "answer": 300 },
+
+  { "id": 76, "question": "How many volumes are there in the manga One Piece (as of recent count)?", "answer": 108 },
+  { "id": 77, "question": "How many episodes are in the anime Naruto (original series only)?", "answer": 220 },
+  { "id": 78, "question": "How many episodes are in Naruto Shippuden?", "answer": 500 },
+  { "id": 79, "question": "How many chapters are in Attack on Titan?", "answer": 139 },
+  { "id": 80, "question": "How many minutes long is the movie Spirited Away?", "answer": 125 },
+
+  { "id": 81, "question": "How many hours of music are on an average full-length album?", "answer": 1 },
+  { "id": 82, "question": "How many sesame seeds are on a McDonald's Big Mac bun (average estimate)?", "answer": 178 },
+  { "id": 83, "question": "What is the maximum length of a TikTok video (in minutes)?", "answer": 10 },
+  { "id": 84, "question": "How many days is the longest Snapchat streak ever recorded (approximate)?", "answer": 3000 },
+  { "id": 85, "question": "How many characters can a tweet have after the expansion?", "answer": 280 },
+
+  { "id": 86, "question": "How many views does the most viewed YouTube video have?", "answer": 16600000000 },
+  { "id": 87, "question": "How many subreddits exist on Reddit (approximate)?", "answer": 3000000 },
+  { "id": 88, "question": "How many users does TikTok have worldwide (approximate)?", "answer": 1500000000 },
+  { "id": 89, "question": "How many milliseconds is the delay of a typical online multiplayer game considered 'low latency'?", "answer": 50 },
+  { "id": 90, "question": "How many emojis are in the Unicode standard (approximate)?", "answer": 3600 },
+
+  { "id": 91, "question": "How many volumes are in the manga Demon Slayer?", "answer": 23 },
+  { "id": 92, "question": "How many episodes are in the anime One Piece (as of recent count)?", "answer": 1100 },
+  { "id": 93, "question": "How many years has the Pokémon franchise existed (from 1996 to now, approximate)?", "answer": 29 },
+  { "id": 94, "question": "How many copies has Minecraft sold?", "answer": 300000000 },
+  { "id": 95, "question": "How many gigabytes is the size of Genshin Impact on mobile (approximate)?", "answer": 20 },
+  { "id": 96, "question": "How many hot dogs were eaten in the world record Nathan’s Hot Dog Eating Contest?", "answer": 76 },
+  { "id": 97, "question": "How many meters is the tallest man ever recorded?", "answer": 2.72 },
+  { "id": 98, "question": "How many kilograms did the heaviest pumpkin ever weigh?", "answer": 1226 },
+  { "id": 99, "question": "How many meters is the longest fingernails (combined length) ever recorded?", "answer": 9.85 },
+  { "id": 100, "question": "How many seconds is the longest time holding one’s breath (static apnea)?", "answer": 1440 },
+
+  { "id": 101, "question": "How many people participated in the largest human domino fall?", "answer": 10000 },
+  { "id": 102, "question": "How many meters is the tallest building in the world (Burj Khalifa)?", "answer": 828 },
+  { "id": 103, "question": "How many kilograms is the heaviest weight ever lifted in a deadlift (strongman record)?", "answer": 501 },
+  { "id": 104, "question": "How many kilometers long is the longest line of pizza ever made?", "answer": 1.93 },
+  { "id": 105, "question": "How many people were in the largest pillow fight?", "answer": 7681 },
+
+  { "id": 106, "question": "How many meters is the longest jump by a cat?", "answer": 2.58 },
+  { "id": 107, "question": "How many balloons were used in the largest balloon sculpture?", "answer": 100000 },
+  { "id": 108, "question": "How many hours is the longest gaming marathon ever recorded?", "answer": 138 },
+  { "id": 109, "question": "How many kilograms is the largest chocolate bar ever made?", "answer": 5792 },
+  { "id": 110, "question": "How many meters is the longest beard ever recorded?", "answer": 5.33 },
+
+  { "id": 111, "question": "How many seconds is the fastest time to solve a Rubik’s Cube (world record)?", "answer": 3.13 },
+  { "id": 112, "question": "How many people attended the largest concert ever (Rod Stewart, 1994)?", "answer": 3500000 },
+  { "id": 113, "question": "How many meters is the tallest stack of pancakes ever recorded?", "answer": 1.01 },
+  { "id": 114, "question": "How many kilometers per hour is the fastest speed reached on a bicycle (drafting record)?", "answer": 296 },
+  { "id": 115, "question": "How many kilograms is the largest burger ever made?", "answer": 1164 },
+
+  { "id": 116, "question": "How many meters is the longest paper airplane flight distance?", "answer": 88.31 },
+  { "id": 117, "question": "How many people participated in the largest yoga class?", "answer": 10000 },
+  { "id": 118, "question": "How many candles were on the largest birthday cake ever?", "answer": 72000 },
+  { "id": 119, "question": "How many meters is the longest distance walked on LEGO barefoot?", "answer": 457 },
+  { "id": 120, "question": "How many kilograms is the largest pizza ever made?", "answer": 23000 },
+  { "id": 122, "question": "How many steps does the average person walk per day?", "answer": 5000 },
+  { "id": 123, "question": "How many liters of water should a person drink per day (recommended)?", "answer": 2 },
+  { "id": 124, "question": "How many minutes does it take to boil an egg (hard-boiled)?", "answer": 10 },
+  { "id": 125, "question": "How many calories are in a typical fast food burger?", "answer": 550 },
+
+  { "id": 126, "question": "How many minutes is the average commute to work (one way)?", "answer": 27 },
+  { "id": 127, "question": "How many times does the average person check their phone per day?", "answer": 100 },
+  { "id": 128, "question": "How many hours per day does the average person spend on their phone?", "answer": 4 },
+  { "id": 129, "question": "How many minutes does it take to fall asleep on average?", "answer": 15 },
+  { "id": 130, "question": "How many seconds should you wash your hands for?", "answer": 20 },
+
+  { "id": 131, "question": "How many days does it take to form a habit (commonly cited)?", "answer": 66 },
+  { "id": 132, "question": "How many minutes should you brush your teeth per session?", "answer": 2 },
+  { "id": 133, "question": "How many grams of sugar are in a can of soda?", "answer": 39 },
+  { "id": 134, "question": "How many minutes should you exercise per week (recommended)?", "answer": 150 },
+  { "id": 135, "question": "How many hours per night is considered sleep deprivation threshold?", "answer": 6 },
+
+  { "id": 136, "question": "How many liters of water does a typical shower use per minute?", "answer": 10 },
+  { "id": 137, "question": "How many minutes can the average person hold their breath?", "answer": 1 },
+  { "id": 138, "question": "How many calories does the average person burn walking 10,000 steps?", "answer": 400 },
+  { "id": 139, "question": "How many days can a human survive without food (approximate)?", "answer": 30 },
+  { "id": 140, "question": "How many days can a human survive without water (approximate)?", "answer": 3 },
+
+  { "id": 141, "question": "How many minutes should you wait before swimming after eating (myth-based)?", "answer": 30 },
+  { "id": 142, "question": "How many hours does it take for caffeine to wear off (half-life)?", "answer": 5 },
+  { "id": 143, "question": "How many seconds does it take to microwave a cup of water?", "answer": 120 },
+  { "id": 144, "question": "How many emails does the average office worker receive per day?", "answer": 120 },
+  { "id": 145, "question": "How many minutes per day should you stand if you sit all day (recommended)?", "answer": 60 },
+
+  { "id": 146, "question": "How many grams of protein should an average adult consume per day?", "answer": 50 },
+  { "id": 147, "question": "How many hours does it take to fully charge a smartphone (average)?", "answer": 2 },
+  { "id": 148, "question": "How many minutes does it take to cook instant noodles?", "answer": 3 },
+  { "id": 149, "question": "How many liters is the capacity of a standard water bottle?", "answer": 0.5 },
+  { "id": 150, "question": "How many days does it take for muscles to recover after a workout (average)?", "answer": 2 },
+  {
+    "id": 150,
+    "question": "How many calories does an average cup of coffee contain (with cream and sugar)?",
+    "answer": 100
+  },
+  {
+    "id": 151,
+    "question": "How many people fit inside a typical bus (seating capacity)?",
+    "answer": 50
+  },
+  {
+    "id": 152,
+    "question": "What jersey number did Michael Jordan wear for the majority of his NBA career?",
+    "answer": 23
+  },
+  {
+    "id": 153,
+    "question": "How many hearts does an octopus have?",
+    "answer": 3
+  },
+  {
+    "id": 154,
+    "question": "How many elements are currently officially recognized on the Periodic Table?",
+    "answer": 118
+  },
+  {
+    "id": 155,
+    "question": "How many eyes does a honeybee have?",
+    "answer": 5
+  },
+  {
+    "id": 156,
+    "question": "How many human beings have physically walked on the moon?",
+    "answer": 12
+  },
+  {
+    "id": 157,
+    "question": "How many grams of chocolate is in an average chocolate bar?",
+    "answer": 50
+  },
+  {
+    "id": 158,
+    "question": "How many milliliters are in a standard shot glass?",
+    "answer": 45
+  },
+  {
+    "id": 159,
+    "question": "How many meters long is a standard tennis court?",
+    "answer": 24
+  },
+  {
+    "id": 160,
+    "question": "How many time zones does Russia cover?",
+    "answer": 11
+  },
+  {
+    "id": 161,
+    "question": "What is the only number known to be both the sum and product of its factors (excluding itself)?",
+    "answer": 6
+  },
+  {
+    "id": 162,
+    "question": "How many liters is a typical car gas tank (approximate)?",
+    "answer": 60
+  },
+  {
+    "id": 163,
+    "question": "How many meters is the height of a standard basketball hoop?",
+    "answer": 3
+  },
+  {
+    "id": 164,
+    "question": "What is the only number whose name is written in alphabetical order?",
+    "answer": 40
+  },
+  {
+    "id": 165,
+    "question": "How many total pieces are on the board at the beginning of a standard game of chess?",
+    "answer": 32
+  },
+  {
+    "id": 166,
+    "question": "How many meters is the length of an Olympic swimming pool?",
+    "answer": 50
+  },
+  {
+    "id": 167,
+    "question": "What is the total sum of all numbers found on a standard roulette wheel?",
+    "answer": 666
+  },
+  {
+    "id": 168,
+    "question": "How many millimeters is the thickness of a typical sheet of paper?",
+    "answer": 0.1
+  },
+  {
+    "id": 169,
+    "question": "How many rooms are in a typical 3-bedroom apartment (approximate)?",
+    "answer": 8
+  },
+  {
+    "id": 170,
+    "question": "How many kilometers can an electric car travel on a full charge (typical)?",
+    "answer": 400
+  },
+  {
+    "id": 171,
+    "question": "How many inches is the average television screen size (diagonal)?",
+    "answer": 55
+  },
+  {
+    "id": 172,
+    "question": "To the nearest whole number, what percentage of the human brain is composed of fat?",
+    "answer": 60
+  },
+  {
+    "id": 173,
+    "question": "How many days did the Trojan War last according to Homer's epic accounts?",
+    "answer": 10
+  },
+  {
+    "id": 174,
+    "question": "How many minutes does a typical shower last (average)?",
+    "answer": 8
+  },
+  {
+    "id": 175,
+    "question": "How many grams of fiber should a person eat per day (recommended)?",
+    "answer": 25
+  },
+  {
+    "id": 176,
+    "question": "How many dots are contained in a single standard Braille cell?",
+    "answer": 6
+  },
+  {
+    "id": 177,
+    "question": "What is the atomic number of Carbon on the Periodic Table?",
+    "answer": 6
+  },
+  {
+    "id": 178,
+    "question": "How many items are included in a standard 'baker's dozen'?",
+    "answer": 13
+  },
+  {
+    "id": 179,
+    "question": "What is the numeric value of one 'jiffy', a real unit of time, in fractions of a second?",
+    "answer": 0.01
+  },
+  {
+    "id": 180,
+    "question": "How many years old is a filly when she is officially considered a mare in horse racing?",
+    "answer": 5
+  },
+  {
+    "id": 181,
+    "question": "To the nearest whole number, how many seeds are found on the outside of an average-sized strawberry?",
+    "answer": 200
+  },
+  {
+    "id": 182,
+    "question": "How many minutes does it take to bake a cake in a standard oven?",
+    "answer": 30
+  },
+  {
+    "id": 183,
+    "question": "In a standard game of ice hockey, how many players from one team are typically on the ice at once?",
+    "answer": 6
+  },
+  {
+    "id": 184,
+    "question": "How many meters deep is a typical swimming pool (residential)?",
+    "answer": 2
+  },
+  {
+    "id": 185,
+    "question": "How many inches is the diagonal length of a standard credit card?",
+    "answer": 3.4
+  },
+  {
+    "id": 186,
+    "question": "How many seconds long was the longest-ever Oscar acceptance speech, delivered by Adrien Brody?",
+    "answer": 335
+  },
+    {
+        "id": 187,
+        "question": "How many liters of paint does it take to paint a standard room (approximate)?",
+        "answer": 10
+    },
+    {
+        "id": 188,
+        "question": "How many kilometers is the average distance between cities in the USA?",
+        "answer": 100
+    },
+    {
+        "id": 189,
+        "question": "How many grams of sugar are in a typical candy bar?",
+        "answer": 30
+    },
+    {
+        "id": 190,
+        "question": "How many people work at a typical McDonald's restaurant?",
+        "answer": 50
+    },
+    {
+        "id": 191,
+        "question": "How many liters of gasoline does the average car consume per year?",
+        "answer": 500
+    },
+    {
+        "id": 192,
+        "question": "How many kilometers is the average distance a person drives in a year?",
+        "answer": 15000
+    },
+    {
+        "id": 193,
+        "question": "How many grams of protein are in a typical chicken breast (100g)?",
+        "answer": 31
+    },
+    {
+        "id": 194,
+        "question": "How many minutes does it take to cook a medium steak on a grill (per side)?",
+        "answer": 5
+    },
+    {
+        "id": 195,
+        "question": "How many liters of water does the average person use per day (including all activities)?",
+        "answer": 3000
+    },
+    {
+        "id": 196,
+        "question": "How many countries are in the European Union (approximate)?",
+        "answer": 27
+    },
+    {
+        "id": 197,
+        "question": "How many grams of caffeine are in a typical cup of coffee?",
+        "answer": 95
+    },
+    {
+        "id": 198,
+        "question": "How many minutes does it take to boil a liter of water on a standard stovetop?",
+        "answer": 10
+    },
+    {
+        "id": 199,
+        "question": "How many liters of blood does the average adult human have?",
+        "answer": 5
+    },
+    {
+        "id": 200,
+        "question": "How many megapixels does a typical smartphone camera have (modern)?",
+        "answer": 12
+    },
+    {
+        "id": 201,
+        "question": "How many sides does a enneagon have?",
+        "answer": 9
+    }
+]
