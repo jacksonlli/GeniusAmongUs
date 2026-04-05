@@ -481,17 +481,17 @@ class QuizGame(commands.Cog):
         await interaction.response.send_message(f"✅ Your answer **{value}** has been submitted!", ephemeral=True)
 
         # Send public update on answer count
-        answered_count = len(self.answers)
-        total_players = len(self.registered_players)
-        remaining = total_players - answered_count
+        # answered_count = len(self.answers)
+        # total_players = len(self.registered_players)
+        # remaining = total_players - answered_count
         
-        answer_embed = discord.Embed(
-            title="📝 Answer Submitted!",
-            description=f"**{self.registered_players[user_id]['nickname']}** submitted an answer. {answered_count}/{total_players} answered.",
-            color=discord.Color.blue()
-        )
+        # answer_embed = discord.Embed(
+        #     title="📝 Answer Submitted!",
+        #     description=f"**{self.registered_players[user_id]['nickname']}** submitted an answer. {answered_count}/{total_players} answered.",
+        #     color=discord.Color.blue()
+        # )
         
-        await interaction.channel.send(embed=answer_embed)
+        # await interaction.channel.send(embed=answer_embed)
 
         # Check if all registered players have answered
         if len(self.answers) >= len(self.registered_players):
