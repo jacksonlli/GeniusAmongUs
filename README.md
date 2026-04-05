@@ -1,6 +1,6 @@
 # Discord Among Us Trivia Bot
 
-A Discord bot that hosts **Among Us-style social deduction trivia games** with a streamlined round flow: `/newgame`, `/register`, `/question`, `/answer`, `/endquestion`, `/accuse`, and `/endgame`.
+A Discord bot that hosts **Among Us-style social deduction trivia games** with a streamlined round flow: `/newgame`, `/register`, `/ready`, `/answer`, `/endquestion`, `/accuse`, and `/endgame`.
 
 ## Game Overview
 
@@ -15,11 +15,11 @@ This bot combines numerical trivia with hidden-role deduction. One player is sec
 ## Features
 
 ✨ **Game Features:**
-- **Fast setup:** `/newgame` opens registration, `/question` begins play
+- **Fast setup:** `/newgame` opens registration, `/ready` begins play
 - **Private role delivery:** The imposter gets answers via DM
 - **Answer-based scoring:** Top answers earn rewards each round
 - **Accusation mechanic:** Correct accusations boost voters, wrong ones penalize them
-- **Flexible flow:** Continue with `/question` or finish with `/endgame`
+- **Flexible flow:** Continue with `/ready` or finish with `/endgame`
 
 🎯 **Scoring System:**
 - **1st place:** 3 points
@@ -134,8 +134,11 @@ Open registration for a new game.
 ### `/register`
 Join the open game registration.
 
+### `/ready`
+Ready up to start the game or begin the next question once all players are prepared.
+
 ### `/question`
-Start the first question or the next round.
+View your private role and question for the current round.
 
 ### `/answer <number>`
 Submit your numerical answer to the active question.
@@ -163,17 +166,17 @@ Show all available commands.
 ### Game Setup
 1. Start registration with `/newgame`.
 2. Players join with `/register`.
-3. Begin the first round with `/question`.
-4. Players receive their roles privately as the first question starts.
+3. Begin the first round with `/ready`.
+4. Each player uses `/question` to reveal their private role and question.
 
 ### Round Flow
-1. The bot posts a question in the channel.
+1. The bot starts the question and players use `/question` to view their private role and question.
 2. Players submit answers with `/answer <number>`.
 3. The round ends when everyone has answered or when `/endquestion` is used.
 4. Points are awarded to the top answers.
 5. The leaderboard is displayed.
 6. Players may optionally accuse someone with `/accuse <player>`.
-7. Use `/question` to start the next round.
+7. Use `/ready` to start the next round.
 
 ### Win Condition
 - A player wins when they reach the configured points threshold.
@@ -211,12 +214,12 @@ Scores are automatically saved to `scores.json` in the format:
 
 ### Start the First Question
 ```
-[Admin]: /question
+[Admin]: /ready
 [Bot]: 🎮 Game started! First question incoming.
 
-[Alice receives DM]: 🎭 Your Role: IMPOSTER!
-[Bob receives DM]: 🎭 Your Role: VILLAGER!
-[Charlie receives DM]: 🎭 Your Role: VILLAGER!
+[Alice receives a private role/status update]: 🎭 Your Role: IMPOSTER!
+[Bob receives a private role/status update]: 🎭 Your Role: VILLAGER!
+[Charlie receives a private role/status update]: 🎭 Your Role: VILLAGER!
 ```
 
 ### Gameplay Round
@@ -256,7 +259,7 @@ Scores are automatically saved to `scores.json` in the format:
 
 ### Continue or End
 ```
-[Admin]: /question
+[Admin]: /ready
 [Bot]: 🎯 Next question is starting now.
 
 [Admin]: /endgame

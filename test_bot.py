@@ -128,7 +128,7 @@ def test_readme_documentation():
     with open("README.md", "r", encoding="utf-8") as f:
         content = f.read()
 
-    required_phrases = ["/newgame", "/question", "/rules", "/accuse", "Use /newgame"]
+    required_phrases = ["/newgame", "/ready", "/rules", "/accuse", "Use /newgame"]
     missing = [phrase for phrase in required_phrases if phrase not in content]
 
     if missing:

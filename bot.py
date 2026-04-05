@@ -48,6 +48,7 @@ class QuizGame(commands.Cog):
         self.round_active = False  # Whether a question round is active
         self.registration_open = False  # Whether registration is currently open
         self.accusation_open = False  # Whether accusation phase is open after a question
+        self.ready_players = set()  # Set of user_ids who have readied up for next question
 
 
     def adjust_player_points(self, player_id, delta):
@@ -82,7 +83,7 @@ class QuizGame(commands.Cog):
         self.round_active = False
         self.accusation_open = False
         self.used_questions = set()
-
+        self.ready_players = set()
         embed = discord.Embed(
             title="🎮 New Game Registration Open!",
             description="A trivia social deduction game is starting soon.",
@@ -90,7 +91,7 @@ class QuizGame(commands.Cog):
         )
         embed.add_field(
             name="How to Play",
-            value="• Use `/register` to join the game\n• Use `/question` to view questions privately\n• The imposter gets private answers\n• Answer with `/answer <number>`\n• Use `/accuse <player>` after a round if you suspect the imposter",
+            value="• Use `/register` to join the game\n• Once all players are ready, type `/ready` to start the next question\n• Use `/question` to reveal your private role and question\n• Answer with `/answer <number>`\n• Use `/accuse <player>` after a round if you suspect the imposter",
             inline=False
         )
         embed.add_field(name="Registration", value="Use `/register` to join now!", inline=False)
@@ -149,91 +150,176 @@ class QuizGame(commands.Cog):
         )
         embed.add_field(name="Your Nickname", value=f"**{nickname}**", inline=False)
         embed.add_field(name="Total Players", value=str(len(self.registered_players)), inline=True)
-        embed.add_field(name="All in?", value="Type `/question` to begin!", inline=False)
-        embed.add_field(name="Accuse Tip", value="Use `/accuse <nickname>` to accuse a player.", inline=False)
+        embed.add_field(name="All in?", value="Game begins once everyone typed `/ready`!", inline=False)
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name="question", description="View the current question privately")
-    async def question_command(self, interaction: discord.Interaction):
-        """View the current question privately"""
-        if not self.game_active and not self.registration_open:
+    @app_commands.command(name="ready", description="Signal that you're ready for the next question")
+    async def ready_command(self, interaction: discord.Interaction):
+        """Signal readiness for the next question or to view your private role when a round is active"""
+        user_id = interaction.user.id
+
+        if not self.registration_open and not self.game_active:
             await interaction.response.send_message(
                 "❌ No active game. Use /newgame to start a game.",
                 ephemeral=True
             )
             return
 
-        # if self.registration_open and len(self.registered_players) < 2:
-        #     await interaction.response.send_message(
-        #         "❌ Need at least 2 players registered to start the game. Use /register or /rules for instructions.",
-        #         ephemeral=True
-        #     )
-        #     return
-
-        current_user_id = interaction.user.id
-
-        if current_user_id not in self.registered_players:
+        if user_id not in self.registered_players:
             await interaction.response.send_message(
-                "❌ You are not registered in the current game.",
+                "❌ You are not registered in the current game. Use /register first.",
                 ephemeral=True
             )
             return
 
-        if not self.game_active and self.registration_open:
-            # Start the game
-            import random
-            player_ids = list(self.registered_players.keys())
-            self.current_imposter = random.choice(player_ids)
-            for user_id, player_data in self.registered_players.items():
-                player_data["role"] = "imposter" if user_id == self.current_imposter else "villager"
-                player_data.setdefault("points", 0)
+        nickname = self.registered_players[user_id]["nickname"]
 
-            self.game_active = True
-            self.registration_open = False
-            self.accusation_open = False
+        if self.registration_open and not self.game_active:
+            self.ready_players.add(user_id)
+            ready_count = len(self.ready_players)
+            total_players = len(self.registered_players)
 
-        if not self.round_active:
-            # Announce the new round publicly before the private question message
-            round_embed = discord.Embed(
-                title="🟢 Round Started!",
-                description="A new question is available. Use `/question` to view it privately.",
+            embed = discord.Embed(
+                title="✅ Player Ready!",
+                description=f"**{nickname}** is ready to start the game!",
+                color=discord.Color.green()
+            )
+            embed.add_field(
+                name="Ready Players",
+                value=f"{ready_count}/{total_players}",
+                inline=True
+            )
+
+            if ready_count >= total_players:
+                embed.add_field(
+                    name="📫 Question Ready!",
+                    value="The first question is coming up. Use `/question` to reveal your private role and question.",
+                    inline=False
+                )
+                await interaction.response.send_message(embed=embed)
+                await self.start_game(interaction.channel)
+            else:
+                embed.add_field(
+                    name="Waiting For",
+                    value=f"{total_players - ready_count} more player(s) to type `/ready`",
+                    inline=False
+                )
+                await interaction.response.send_message(embed=embed)
+
+        elif self.game_active and not self.round_active:
+            self.ready_players.add(user_id)
+            ready_count = len(self.ready_players)
+            total_players = len(self.registered_players)
+
+            embed = discord.Embed(
+                title="✅ Player Ready!",
+                description=f"**{nickname}** is ready for the next question!",
                 color=discord.Color.blue()
             )
-            await interaction.channel.send(embed=round_embed)
-            await self.ask_next_question(interaction.channel)
+            embed.add_field(
+                name="Ready Players",
+                value=f"{ready_count}/{total_players}",
+                inline=True
+            )
 
+            if ready_count >= total_players:
+                embed.add_field(
+                    name="🟢 Next Question!",
+                    value="All players are ready! The next question is starting. Use `/question` to reveal your private role and question.",
+                    inline=False
+                )
+                await interaction.response.send_message(embed=embed)
+                await self.start_next_round(interaction.channel)
+            else:
+                embed.add_field(
+                    name="Waiting For",
+                    value=f"{total_players - ready_count} more player(s) to type `/ready`",
+                    inline=False
+                )
+                await interaction.response.send_message(embed=embed)
+
+        elif self.game_active and self.round_active:
+            await interaction.response.send_message(
+                "❌ A question is already active. Use `/question` to view your private role and question.",
+                ephemeral=True
+            )
+        else:
+            await interaction.response.send_message(
+                "❌ A question is currently active or accusations are open. Wait for the round to end.",
+                ephemeral=True
+            )
+
+    @app_commands.command(name="question", description="Reveal your private role and question")
+    async def question_command(self, interaction: discord.Interaction):
+        """Reveal your private role and the current question"""
+        if not self.game_active or not self.round_active:
+            await interaction.response.send_message(
+                "❌ There is no active question right now. Use `/ready` when the next question is available.",
+                ephemeral=True
+            )
+            return
 
         user_id = interaction.user.id
-        player_data = self.registered_players.get(user_id, {})
+        if user_id not in self.registered_players:
+            await interaction.response.send_message(
+                "❌ You are not registered in the current game. Use `/register` first.",
+                ephemeral=True
+            )
+            return
+
+
+        player_data = self.registered_players[user_id]
         role = player_data.get("role", "villager")
 
-        # Send question privately via ephemeral
-        embed = discord.Embed(
+        role_embed = discord.Embed(
             title="🎭 Your Role & Question",
             color=discord.Color.red() if role == "imposter" else discord.Color.green()
         )
-        embed.description = f"{player_data.get('nickname', 'Unknown')}: You are a **{role.upper()}**!"
-        embed.add_field(
+        role_embed.description = f"{player_data.get('nickname', 'Unknown')}: You are a **{role.upper()}**!"
+        role_embed.add_field(
             name="Question",
             value=self.active_question,
             inline=False
         )
         if role == "imposter":
-            embed.add_field(
+            role_embed.add_field(
                 name="Correct Answer",
                 value=f"**{self.correct_answer}**",
                 inline=False
             )
-        embed.add_field(
+        role_embed.add_field(
             name="How to Answer",
             value="Use `/answer <number>` in the channel.",
             inline=False
         )
+        await interaction.response.send_message(embed=role_embed, ephemeral=True)
 
-        await interaction.response.send_message(embed=embed, ephemeral=True)
+    async def start_game(self, channel):
+        """Start the game by assigning roles and beginning the first round"""
+        import random
+        player_ids = list(self.registered_players.keys())
+        self.current_imposter = random.choice(player_ids)
+        for user_id, player_data in self.registered_players.items():
+            player_data["role"] = "imposter" if user_id == self.current_imposter else "villager"
+            player_data.setdefault("points", 0)
 
-    
+        self.game_active = True
+        self.registration_open = False
+        self.accusation_open = False
+        self.ready_players.clear()  # Clear ready players for next phase
 
+        # Start first round
+        await self.start_next_round(channel)
+
+    async def start_next_round(self, channel):
+        """Start the next question round"""
+
+        await self.ask_next_question(channel)
+
+        if not self.game_active or not self.active_question:
+            return
+
+        self.ready_players.clear()  # Clear ready players for next phase
 
     async def ask_next_question(self, channel):
         """Set up the next question"""
@@ -401,13 +487,8 @@ class QuizGame(commands.Cog):
         
         answer_embed = discord.Embed(
             title="📝 Answer Submitted!",
-            description=f"**{self.registered_players[user_id]['nickname']}** has submitted their answer.",
+            description=f"**{self.registered_players[user_id]['nickname']}** submitted an answer. {answered_count}/{total_players} answered.",
             color=discord.Color.blue()
-        )
-        answer_embed.add_field(
-            name="Progress",
-            value=f"✅ Answered: {answered_count}/{total_players}\n⏳ Remaining: {remaining}",
-            inline=False
         )
         
         await interaction.channel.send(embed=answer_embed)
@@ -429,7 +510,7 @@ class QuizGame(commands.Cog):
 
         if not self.round_active and not self.accusation_open:
             await interaction.response.send_message(
-                "❌ Accusations are not open right now. Answer the current question or use /question to start the next one.",
+                "❌ Accusations are not open right now. Answer the current question or use /ready to start the next one.",
                 ephemeral=True
             )
             return
@@ -464,6 +545,18 @@ class QuizGame(commands.Cog):
         for voted_user_id in self.accusation_votes.values():
             vote_counts[voted_user_id] = vote_counts.get(voted_user_id, 0) + 1
 
+        # Public announcement of accusation
+        voter_nickname = self.registered_players[voter_id]["nickname"]
+        accused_nickname = self.registered_players[target_user_id]["nickname"]
+        
+        accusation_embed = discord.Embed(
+            title="🕵️ Accusation Made!",
+            description=f"**{voter_nickname}** accused **{accused_nickname}**! Votes: {vote_counts.get(target_user_id, 0)}",
+            color=discord.Color.orange()
+        )
+        
+        await interaction.channel.send(embed=accusation_embed)
+
         majority_needed = len(self.registered_players) // 2 + 1
 
         if vote_counts.get(target_user_id, 0) >= majority_needed:
@@ -471,14 +564,6 @@ class QuizGame(commands.Cog):
             accused_nickname = accused_data["nickname"]
             accused_role = accused_data["role"]
             voters = [self.registered_players[vid]["nickname"] for vid, tid in self.accusation_votes.items() if tid == target_user_id]
-
-            result_embed = discord.Embed(
-                title="🕵️ Accusation Resolved",
-                color=discord.Color.purple()
-            )
-            result_embed.add_field(name="Accused Player", value=f"**{accused_nickname}**", inline=False)
-            result_embed.add_field(name="Votes", value=f"{vote_counts[target_user_id]}/{majority_needed}", inline=False)
-            result_embed.add_field(name="Voters", value=", ".join(voters) if voters else "None", inline=False)
 
             if accused_role == "imposter":
                 self.adjust_player_points(target_user_id, -5)
@@ -490,42 +575,28 @@ class QuizGame(commands.Cog):
                 import random
                 if available_targets:
                     self.current_imposter = random.choice(available_targets)
+                else:
+                    pass  # remains the same
 
                 for uid, player_data in self.registered_players.items():
                     player_data["role"] = "imposter" if uid == self.current_imposter else "villager"
 
-                result_embed.add_field(name="Result", value=f"Correct! The imposter was **{accused_nickname}**.", inline=False)
-                result_embed.add_field(name="Imposter Penalty", value="-5 points", inline=True)
-                result_embed.add_field(name="Correct Voters", value="+5 points each", inline=True)
-
-                # New imposter can check /myrole for current question info
             else:
                 for voter, target in self.accusation_votes.items():
                     if target == target_user_id:
                         self.adjust_player_points(voter, -3)
 
-                result_embed.add_field(name="Result", value=f"Wrong accusation! **{accused_nickname}** was not the imposter.", inline=False)
-                result_embed.add_field(name="Penalty", value="-3 points for each incorrect voter", inline=False)
-
             self.accusation_votes = {}
-            self.accusation_open = False
 
             leaderboard = "\n".join(
                 f"• **{data['nickname']}** — {data.get('points', 0)} pts" for data in self.registered_players.values()
             )
-            result_embed.add_field(name="Leaderboard", value=leaderboard or "No players", inline=False)
 
-            await interaction.response.send_message(embed=result_embed)
-
-            # Check for win condition after accusation scoring
-            winner_id = None
-            for user_id, player_data in self.registered_players.items():
-                if player_data.get("points", 0) >= self.win_threshold:
-                    winner_id = user_id
-                    break
-
-            if winner_id:
-                await self.end_game(interaction.channel, winner_id)
+            result_embed = discord.Embed(
+                title="🕵️ Accusation Resolved",
+                description=f"**{accused_nickname}** accused. Votes: {vote_counts[target_user_id]}/{majority_needed}. Voters: {', '.join(voters) if voters else 'None'}.\n\n{ 'Correct! New imposter selected.' if accused_role == 'imposter' else 'Wrong accusation!' }\n\n**Leaderboard:**\n{leaderboard}",
+                color=discord.Color.purple()
+            )
         else:
             await interaction.response.send_message(
                 f"✅ Vote recorded for {player_name}. Current votes: {vote_counts.get(target_user_id, 0)}/{majority_needed} needed.",
@@ -556,10 +627,9 @@ class QuizGame(commands.Cog):
 
             no_answer_embed = discord.Embed(
                 title="⏹️ Question Ended",
-                description="The question was ended without any answers.",
+                description="No answers submitted. Use `/ready` for next round or `/accuse <player>` to accuse.",
                 color=discord.Color.orange()
             )
-            no_answer_embed.add_field(name="Next Step", value="Use `/question` to start the next round or `/accuse <player>` if you suspect the imposter.", inline=False)
 
             if hasattr(self, '_last_channel'):
                 await self._last_channel.send(embed=no_answer_embed)
@@ -568,12 +638,6 @@ class QuizGame(commands.Cog):
         sorted_answers = sorted(
             self.answers.items(),
             key=lambda x: x[1]["difference"]
-        )
-
-        embed = discord.Embed(
-            title="✅ Question Ended!",
-            description=f"Correct Answer: **{self.correct_answer}**",
-            color=discord.Color.green()
         )
 
         results_text = ""
@@ -585,7 +649,7 @@ class QuizGame(commands.Cog):
             self.adjust_player_points(user_id, points)
 
             difference = answer_data["difference"]
-            results_text += f"{medal} **{answer_data['nickname']}** - Answer: {answer_data['answer']} (Off by {difference}) - +{points} pts\n"
+            results_text += f"{medal} **{answer_data['nickname']}** - {answer_data['answer']} (Off by {difference}) - +{points} pts\n"
 
             if self.registered_players[user_id]["points"] >= self.win_threshold and winner_id is None:
                 winner_id = user_id
@@ -594,14 +658,17 @@ class QuizGame(commands.Cog):
             results_text += "\n**Other Answers:**\n"
             for user_id, answer_data in sorted_answers[3:]:
                 difference = answer_data["difference"]
-                results_text += f"• **{answer_data['nickname']}** - Answer: {answer_data['answer']} (Off by {difference})\n"
-
-        embed.add_field(name="Results", value=results_text, inline=False)
+                results_text += f"• **{answer_data['nickname']}** - {answer_data['answer']} (Off by {difference})\n"
 
         current_scores = "\n".join(
             f"• **{data['nickname']}** — {data['points']} pts" for data in self.registered_players.values()
         )
-        embed.add_field(name=f"Current Points ({self.win_threshold} to win)", value=current_scores or "No players", inline=False)
+
+        embed = discord.Embed(
+            title="✅ Question Ended!",
+            description=f"Correct Answer: **{self.correct_answer}**\n\n**Results:**\n{results_text}\n**Current Points ({self.win_threshold} to win):**\n{current_scores}\n\nUse `/accuse <player>` to accuse or `/ready` for next question.",
+            color=discord.Color.green()
+        )
 
         if hasattr(self, '_last_channel'):
             channel = self._last_channel
@@ -615,14 +682,6 @@ class QuizGame(commands.Cog):
 
         if winner_id:
             await self.end_game(channel, winner_id)
-        else:
-            summary_embed = discord.Embed(
-                title="📌 Round Complete",
-                description="Points have been awarded. Use `/accuse <player>` if you suspect the imposter, or `/question` to start the next round.",
-                color=discord.Color.blue()
-            )
-            summary_embed.add_field(name="Next Step", value="Use `/accuse` now or `/question` when ready for the next question.", inline=False)
-            await channel.send(embed=summary_embed)
     
     
     @app_commands.command(name="status", description="Check if a question is active")
@@ -659,16 +718,17 @@ class QuizGame(commands.Cog):
         """Show game rules and command flow"""
         embed = discord.Embed(
             title="📜 Game Rules",
-            description="Follow the flow: /newgame → /register → /question → /answer → /endquestion / /accuse → /question",
+            description="Follow the flow: /newgame → /register → /ready → /answer → /endquestion / /accuse → /ready",
             color=discord.Color.green()
         )
         embed.add_field(name="1. Start a Game", value="Use `/newgame [points]` to open registration.", inline=False)
         embed.add_field(name="2. Register", value="Players join by using `/register`.", inline=False)
-        embed.add_field(name="3. Begin Question", value="Use `/question` to view questions privately.", inline=False)
-        embed.add_field(name="4. Answer", value="Submit answers with `/answer <number>`. The question ends when everyone answers or someone uses `/endquestion`.", inline=False)
+        embed.add_field(name="3. Ready Up", value="Type `/ready` when everyone is registered to start the game.", inline=False)
+        embed.add_field(name="4. Reveal Question", value="Use `/question` to view your private role and question.", inline=False)
+        embed.add_field(name="5. Answer", value="Submit answers with `/answer <number>`. The question ends when everyone answers or someone uses `/endquestion`.", inline=False)
         embed.add_field(name="5. Accuse", value="If you suspect the imposter after a round, use `/accuse <player>`. Points can change after a correct or wrong accusation.", inline=False)
-        embed.add_field(name="6. Continue", value="After points are awarded, use `/question` to start the next round or `/endgame` to finish.", inline=False)
-        embed.add_field(name="Quick Tip", value="If `/question` is used after a finished game, start a new match with `/newgame`.", inline=False)
+        embed.add_field(name="6. Continue", value="After points are awarded, use `/ready` to start the next round or `/endgame` to finish.", inline=False)
+        embed.add_field(name="Quick Tip", value="If you want to start a new match, use `/newgame`.", inline=False)
         embed.add_field(
             name="Goal of the Game",
             value=f"Be the first player to reach the win threshold ({self.win_threshold}) by answering questions accurately and successfully accusing the imposter.",
@@ -694,14 +754,14 @@ class QuizGame(commands.Cog):
         # Game Setup Commands
         embed.add_field(
             name="🎯 Game Setup",
-            value="• `/newgame [points]` - Open registration for a new game\n• `/register` - Join the current game\n• `/question` - View questions privately\n• `/endgame` - End the current game or cancel registration",
+            value="• `/newgame [points]` - Open registration for a new game\n• `/register` - Join the current game\n• `/ready` - Start the game and ready up for each round\n• `/endgame` - End the current game or cancel registration",
             inline=False
         )
 
         # Gameplay Commands
         embed.add_field(
             name="🎲 Gameplay",
-            value="• `/answer <number>` - Submit your numerical answer\n• `/accuse <player>` - Accuse the suspected imposter\n• `/endquestion` - End the current question and award points\n• `/status` - Check current game status\n• `/rules` - Show game flow and command instructions",
+            value="• `/question` - View your private role and question\n• `/answer <number>` - Submit your numerical answer\n• `/accuse <player>` - Accuse the suspected imposter\n• `/endquestion` - End the current question and award points\n• `/status` - Check current game status\n• `/rules` - Show game flow and command instructions",
             inline=False
         )
 
