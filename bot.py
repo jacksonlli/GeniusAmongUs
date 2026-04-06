@@ -4,6 +4,7 @@ from discord import app_commands
 import json
 import os
 import random
+import asyncio
 from datetime import datetime
 
 # Load .env when present
@@ -49,6 +50,8 @@ class QuizGame(commands.Cog):
         self.registration_open = False  # Whether registration is currently open
         self.accusation_open = False  # Whether accusation phase is open after a question
         self.ready_players = set()  # Set of user_ids who have readied up for next question
+        self.accusation_time = 60  # Default accusation time
+        self.accusation_task = None  # Task for accusation timer
 
 
     def adjust_player_points(self, player_id, delta):
@@ -63,9 +66,10 @@ class QuizGame(commands.Cog):
 
     @app_commands.command(name="newgame", description="Open registration for a new game")
     @app_commands.describe(
-        win_threshold="Points needed to win (default: 20)"
+        win_threshold="Points needed to win (default: 20)",
+        accusation_time="Time in seconds for accusation period (default: 60)"
     )
-    async def new_game(self, interaction: discord.Interaction, win_threshold: int = 20):
+    async def new_game(self, interaction: discord.Interaction, win_threshold: int = 20, accusation_time: int = 60):
         """Open registration for a new game"""
         if self.game_active:
             await interaction.response.send_message("A game is already active! Use /endgame to finish it first.", ephemeral=True)
@@ -79,6 +83,7 @@ class QuizGame(commands.Cog):
         self.registered_players = {}
         self.current_imposter = None
         self.win_threshold = win_threshold
+        self.accusation_time = accusation_time
         self.accusation_votes = {}
         self.round_active = False
         self.accusation_open = False
@@ -91,11 +96,12 @@ class QuizGame(commands.Cog):
         )
         embed.add_field(
             name="How to Play",
-            value="• Use `/register` to join the game\n• Once all players are ready, type `/ready` to start the next question\n• Use `/question` to reveal your private role and question\n• Answer with `/answer <number>`\n• Use `/accuse <player>` after a round if you suspect the imposter",
+            value="• Use `/register` to join the game\n• Once all players are ready, type `/ready` to start the next question\n• Use `/question` to reveal your private role and question\n• Answer with `/answer <number>`\n• After each question, accusation period opens for voting or skipping",
             inline=False
         )
         embed.add_field(name="Registration", value="Use `/register` to join now!", inline=False)
         embed.add_field(name="Win Condition", value=f"First player to reach **{self.win_threshold}** points wins.", inline=False)
+        embed.add_field(name="Accusation Period", value=f"{self.accusation_time} seconds after each question.", inline=False)
 
         await interaction.response.send_message(embed=embed)
 
@@ -229,6 +235,9 @@ class QuizGame(commands.Cog):
                     inline=False
                 )
                 await interaction.response.send_message(embed=embed)
+                if self.accusation_open and self.accusation_task:
+                    self.accusation_task.cancel()
+                    self.accusation_task = None
                 await self.start_next_round(interaction.channel)
             else:
                 embed.add_field(
@@ -313,6 +322,9 @@ class QuizGame(commands.Cog):
 
     async def start_next_round(self, channel):
         """Start the next question round"""
+        if self.accusation_task:
+            self.accusation_task.cancel()
+            self.accusation_task = None
 
         await self.ask_next_question(channel)
 
@@ -426,7 +438,7 @@ class QuizGame(commands.Cog):
         )
 
         player_lines = []
-        for user_id, player_data in self.registered_players.items():
+        for player_data in sorted(self.registered_players.values(), key=lambda x: x.get('points', 0), reverse=True):
             role = player_data.get("role", "villager")
             points = player_data.get("points", 0)
             player_lines.append(f"• **{player_data['nickname']}** — {role.title()} — {points} pts")
@@ -478,7 +490,14 @@ class QuizGame(commands.Cog):
             "role": self.registered_players[user_id]["role"]
         }
 
-        await interaction.response.send_message(f"✅ Your answer **{value}** has been submitted!", ephemeral=True)
+        previous_answered = list(self.answers.keys())[:-1]
+        if not previous_answered:
+            msg = f"✅ Your answer **{value}** has been submitted! You are the first to answer."
+        else:
+            nicknames = [self.registered_players[uid]["nickname"] for uid in previous_answered]
+            msg = f"✅ Your answer **{value}** has been submitted! Players who answered before you: {', '.join(nicknames)}"
+
+        await interaction.response.send_message(msg, ephemeral=True)
 
         # Send public update on answer count
         # answered_count = len(self.answers)
@@ -584,17 +603,22 @@ class QuizGame(commands.Cog):
             else:
                 for voter, target in self.accusation_votes.items():
                     if target == target_user_id:
-                        self.adjust_player_points(voter, -3)
+                        self.adjust_player_points(voter, -2)
 
             self.accusation_votes = {}
 
             leaderboard = "\n".join(
-                f"• **{data['nickname']}** — {data.get('points', 0)} pts" for data in self.registered_players.values()
+                f"• **{data['nickname']}** — {data.get('points', 0)} pts" for data in sorted(self.registered_players.values(), key=lambda x: x.get('points', 0), reverse=True)
             )
+
+            if accused_role == "imposter":
+                desc = f"**Correct accusation!** {accused_nickname} was the imposter.\n• Imposter loses 5 points\n• All {len(voters)} voters gain 5 points each\n• A new imposter has been selected\n\n**Updated Leaderboard:**\n{leaderboard}"
+            else:
+                desc = f"**Wrong accusation!** {accused_nickname} was not the imposter.\n• All {len(voters)} voters lose 3 points each\n\n**Updated Leaderboard:**\n{leaderboard}"
 
             result_embed = discord.Embed(
                 title="🕵️ Accusation Resolved",
-                description=f"**{accused_nickname}** accused. Votes: {vote_counts[target_user_id]}/{majority_needed}. Voters: {', '.join(voters) if voters else 'None'}.\n\n{ 'Correct! New imposter selected.' if accused_role == 'imposter' else 'Wrong accusation!' }\n\n**Leaderboard:**\n{leaderboard}",
+                description=desc,
                 color=discord.Color.purple()
             )
         else:
@@ -625,9 +649,13 @@ class QuizGame(commands.Cog):
             self.accusation_open = True
             self.accusation_votes = {}
 
+            if self.accusation_task:
+                self.accusation_task.cancel()
+            self.accusation_task = asyncio.create_task(self.end_accusation_period())
+
             no_answer_embed = discord.Embed(
                 title="⏹️ Question Ended",
-                description="No answers submitted. Use `/ready` for next round or `/accuse <player>` to accuse.",
+                description="No answers submitted. **Accusation period open for {self.accusation_time} seconds!** Use `/ready` for next round or `/accuse <player>` to accuse.",
                 color=discord.Color.orange()
             )
 
@@ -661,12 +689,12 @@ class QuizGame(commands.Cog):
                 results_text += f"• **{answer_data['nickname']}** - {answer_data['answer']} (Off by {difference})\n"
 
         current_scores = "\n".join(
-            f"• **{data['nickname']}** — {data['points']} pts" for data in self.registered_players.values()
+            f"• **{data['nickname']}** — {data['points']} pts" for data in sorted(self.registered_players.values(), key=lambda x: x.get('points', 0), reverse=True)
         )
 
         embed = discord.Embed(
             title="✅ Question Ended!",
-            description=f"Correct Answer: **{self.correct_answer}**\n\n**Results:**\n{results_text}\n**Current Points ({self.win_threshold} to win):**\n{current_scores}\n\nUse `/accuse <player>` to accuse or `/ready` for next question.",
+            description=f"Correct Answer: **{self.correct_answer}**\n\n**Results:**\n{results_text}\n**Current Points ({self.win_threshold} to win):**\n{current_scores}\n\n**Accusation period open for {self.accusation_time} seconds!**\nUse `/accuse <player>` to accuse or `/ready` to start next question early.",
             color=discord.Color.green()
         )
 
@@ -680,8 +708,21 @@ class QuizGame(commands.Cog):
         self.accusation_open = True
         self.accusation_votes = {}
 
+        if self.accusation_task:
+            self.accusation_task.cancel()
+        self.accusation_task = asyncio.create_task(self.end_accusation_period())
+
         if winner_id:
             await self.end_game(channel, winner_id)
+    
+    
+    async def end_accusation_period(self):
+        """Automatically end accusation period after timer"""
+        await asyncio.sleep(self.accusation_time)
+        if self.accusation_open:
+            self.accusation_open = False
+            self.accusation_task = None
+            await self.start_next_round(self._last_channel)
     
     
     @app_commands.command(name="status", description="Check if a question is active")
@@ -705,7 +746,7 @@ class QuizGame(commands.Cog):
                 embed.add_field(name="Answers Received", value=f"{len(self.answers)}/{len(self.registered_players)}", inline=True)
 
             score_lines = "\n".join(
-                f"• {data['nickname']}: {data.get('points', 0)} pts" for data in self.registered_players.values()
+                f"• {data['nickname']}: {data.get('points', 0)} pts" for data in sorted(self.registered_players.values(), key=lambda x: x.get('points', 0), reverse=True)
             )
             embed.add_field(name="Player Points", value=score_lines or "No players yet", inline=False)
         else:
@@ -718,25 +759,25 @@ class QuizGame(commands.Cog):
         """Show game rules and command flow"""
         embed = discord.Embed(
             title="📜 Game Rules",
-            description="Follow the flow: /newgame → /register → /ready → /answer → /endquestion / /accuse → /ready",
+            description="Follow the flow: /newgame [points] [accusation_time] → /register → /ready → /question → /answer → accusation period → /ready",
             color=discord.Color.green()
         )
-        embed.add_field(name="1. Start a Game", value="Use `/newgame [points]` to open registration.", inline=False)
+        embed.add_field(name="1. Start a Game", value="Use `/newgame [points] [accusation_time]` to open registration.", inline=False)
         embed.add_field(name="2. Register", value="Players join by using `/register`.", inline=False)
         embed.add_field(name="3. Ready Up", value="Type `/ready` when everyone is registered to start the game.", inline=False)
         embed.add_field(name="4. Reveal Question", value="Use `/question` to view your private role and question.", inline=False)
-        embed.add_field(name="5. Answer", value="Submit answers with `/answer <number>`. The question ends when everyone answers or someone uses `/endquestion`.", inline=False)
-        embed.add_field(name="5. Accuse", value="If you suspect the imposter after a round, use `/accuse <player>`. Points can change after a correct or wrong accusation.", inline=False)
-        embed.add_field(name="6. Continue", value="After points are awarded, use `/ready` to start the next round or `/endgame` to finish.", inline=False)
+        embed.add_field(name="5. Answer", value="Submit answers with `/answer <number>`. The question ends when everyone answers.", inline=False)
+        embed.add_field(name="6. Accuse", value="After each question, an accusation period opens for the set time. Use `/accuse <player>` to vote or `/ready` to start next question early.", inline=False)
+        embed.add_field(name="7. Continue", value="Use `/ready` to start the next round or `/endgame` to finish.", inline=False)
         embed.add_field(name="Quick Tip", value="If you want to start a new match, use `/newgame`.", inline=False)
         embed.add_field(
             name="Goal of the Game",
-            value=f"Be the first player to reach the win threshold ({self.win_threshold}) by answering questions accurately and successfully accusing the imposter.",
+            value=f"Be the first player to reach the win threshold ({self.win_threshold}) by answering questions accurately and successfully accusing the imposter during accusation periods.",
             inline=False
         )
         embed.add_field(
             name="Imposters Rules",
-            value="Imposters see the correct answer but can be accused to lose their imposter status. Accusing correctly earns all voters +5 points, and -5 to the imposter. Accusing wrong earns voters -3 points.",
+            value="Imposters see the correct answer but can be accused to lose their imposter status. Accusing correctly earns all voters +5 points and -5 to the imposter, selecting a new imposter. Accusing wrong earns voters -2 points each.",
             inline=False
         )
 
@@ -754,14 +795,14 @@ class QuizGame(commands.Cog):
         # Game Setup Commands
         embed.add_field(
             name="🎯 Game Setup",
-            value="• `/newgame [points]` - Open registration for a new game\n• `/register` - Join the current game\n• `/ready` - Start the game and ready up for each round\n• `/endgame` - End the current game or cancel registration",
+            value="• `/newgame [points] [accusation_time]` - Open registration for a new game\n• `/register` - Join the current game\n• `/ready` - Start the game and ready up for each round (also skips accusation period early)\n• `/endgame` - End the current game or cancel registration",
             inline=False
         )
 
         # Gameplay Commands
         embed.add_field(
             name="🎲 Gameplay",
-            value="• `/question` - View your private role and question\n• `/answer <number>` - Submit your numerical answer\n• `/accuse <player>` - Accuse the suspected imposter\n• `/endquestion` - End the current question and award points\n• `/status` - Check current game status\n• `/rules` - Show game flow and command instructions",
+            value="• `/question` - View your private role and question\n• `/answer <number>` - Submit your numerical answer\n• `/accuse <player>` - Vote to accuse the suspected imposter during accusation periods\n• `/status` - Check current game status\n• `/rules` - Show game flow and command instructions",
             inline=False
         )
 
