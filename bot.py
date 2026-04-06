@@ -52,6 +52,7 @@ class QuizGame(commands.Cog):
         self.ready_players = set()  # Set of user_ids who have readied up for next question
         self.accusation_time = 60  # Default accusation time
         self.accusation_task = None  # Task for accusation timer
+        self.accusation_start_time = None  # Time when accusation period started
 
 
     def adjust_player_points(self, player_id, delta):
@@ -527,9 +528,9 @@ class QuizGame(commands.Cog):
             )
             return
 
-        if not self.round_active and not self.accusation_open:
+        if not self.accusation_open:
             await interaction.response.send_message(
-                "❌ Accusations are not open right now. Answer the current question or use /ready to start the next one.",
+                "❌ Accusations are not open right now. Answer the current question or wait for the accusation period to begin.",
                 ephemeral=True
             )
             return
@@ -568,27 +569,42 @@ class QuizGame(commands.Cog):
         voter_nickname = self.registered_players[voter_id]["nickname"]
         accused_nickname = self.registered_players[target_user_id]["nickname"]
         
+        # Calculate time remaining and votes needed
+        time_elapsed = int((datetime.now() - self.accusation_start_time).total_seconds()) if self.accusation_start_time else 0
+        time_remaining = max(0, self.accusation_time - time_elapsed)
+        majority_needed = len(self.registered_players) // 2 # + 1
+        current_votes = vote_counts.get(target_user_id, 0)
+        votes_needed = majority_needed - current_votes
+        
         accusation_embed = discord.Embed(
             title="🕵️ Accusation Made!",
-            description=f"**{voter_nickname}** accused **{accused_nickname}**! Votes: {vote_counts.get(target_user_id, 0)}",
+            description=f"**{voter_nickname}** accused **{accused_nickname}**!\nVotes: {current_votes}/{majority_needed} | Time Left: {time_remaining}s",
             color=discord.Color.orange()
         )
         
         await interaction.channel.send(embed=accusation_embed)
 
-        majority_needed = len(self.registered_players) // 2 + 1
-
         if vote_counts.get(target_user_id, 0) >= majority_needed:
+            # Accusation passed - end the period and process results
+            self.accusation_open = False
+            if self.accusation_task:
+                self.accusation_task.cancel()
+                self.accusation_task = None
+            
             accused_data = self.registered_players[target_user_id]
             accused_nickname = accused_data["nickname"]
             accused_role = accused_data["role"]
             voters = [self.registered_players[vid]["nickname"] for vid, tid in self.accusation_votes.items() if tid == target_user_id]
+            winner_id = None
+            imposter_points = None
 
             if accused_role == "imposter":
-                self.adjust_player_points(target_user_id, -5)
+                imposter_points = self.adjust_player_points(target_user_id, -5)
                 for voter, target in self.accusation_votes.items():
                     if target == target_user_id:
-                        self.adjust_player_points(voter, 5)
+                        voter_points = self.adjust_player_points(voter, 5)
+                        if voter_points >= self.win_threshold:
+                            winner_id = voter
 
                 available_targets = [uid for uid in self.registered_players if uid != self.current_imposter]
                 import random
@@ -603,7 +619,11 @@ class QuizGame(commands.Cog):
             else:
                 for voter, target in self.accusation_votes.items():
                     if target == target_user_id:
-                        self.adjust_player_points(voter, -2)
+                        voter_points = self.adjust_player_points(voter, -2)
+
+            # Check if imposter reached win threshold
+            if accused_role == "imposter" and imposter_points is not None and imposter_points >= self.win_threshold:
+                winner_id = target_user_id
 
             self.accusation_votes = {}
 
@@ -612,18 +632,25 @@ class QuizGame(commands.Cog):
             )
 
             if accused_role == "imposter":
-                desc = f"**Correct accusation!** {accused_nickname} was the imposter.\n• Imposter loses 5 points\n• All {len(voters)} voters gain 5 points each\n• A new imposter has been selected\n\n**Updated Leaderboard:**\n{leaderboard}"
+                desc = f"**Correct accusation!** {accused_nickname} was the imposter.\n• Imposter loses 5 points\n• All {len(voters)} voters gain 5 points each\n• A new imposter has been selected\n\n**Updated Leaderboard:**\n{leaderboard}\n\nAccusation period is over! Type `/ready` to start the next question."
             else:
-                desc = f"**Wrong accusation!** {accused_nickname} was not the imposter.\n• All {len(voters)} voters lose 3 points each\n\n**Updated Leaderboard:**\n{leaderboard}"
+                desc = f"**Wrong accusation!** {accused_nickname} was not the imposter.\n• Voters ({', '.join(voters)}) lose 2 points each\n\n**Updated Leaderboard:**\n{leaderboard}\n\nAccusation period is over! Type `/ready` to start the next question."
 
             result_embed = discord.Embed(
                 title="🕵️ Accusation Resolved",
                 description=desc,
                 color=discord.Color.purple()
             )
+            
+            if hasattr(self, '_last_channel'):
+                await self._last_channel.send(embed=result_embed)
+            
+            if winner_id:
+                await self.end_game(self._last_channel, winner_id)
         else:
+            # Vote not yet passed
             await interaction.response.send_message(
-                f"✅ Vote recorded for {player_name}. Current votes: {vote_counts.get(target_user_id, 0)}/{majority_needed} needed.",
+                f"✅ Vote recorded for {player_name}. Current votes: {vote_counts.get(target_user_id, 0)}/{majority_needed} needed. Time remaining: {time_remaining}s",
                 ephemeral=True
             )
     
@@ -648,6 +675,7 @@ class QuizGame(commands.Cog):
             self.round_active = False
             self.accusation_open = True
             self.accusation_votes = {}
+            self.accusation_start_time = datetime.now()
 
             if self.accusation_task:
                 self.accusation_task.cancel()
@@ -655,7 +683,7 @@ class QuizGame(commands.Cog):
 
             no_answer_embed = discord.Embed(
                 title="⏹️ Question Ended",
-                description="No answers submitted. **Accusation period open for {self.accusation_time} seconds!** Use `/ready` for next round or `/accuse <player>` to accuse.",
+                description=f"No answers submitted. **Accusation period open for {self.accusation_time} seconds!** Use `/accuse <player>` to vote or `/ready` to skip.",
                 color=discord.Color.orange()
             )
 
@@ -694,7 +722,7 @@ class QuizGame(commands.Cog):
 
         embed = discord.Embed(
             title="✅ Question Ended!",
-            description=f"Correct Answer: **{self.correct_answer}**\n\n**Results:**\n{results_text}\n**Current Points ({self.win_threshold} to win):**\n{current_scores}\n\n**Accusation period open for {self.accusation_time} seconds!**\nUse `/accuse <player>` to accuse or `/ready` to start next question early.",
+            description=f"Correct Answer: **{self.correct_answer}**\n\n**Results:**\n{results_text}\n**Current Points ({self.win_threshold} to win):**\n{current_scores}\n\n**Accusation period open for {self.accusation_time} seconds!**\nUse `/accuse <player>` to vote or `/ready` to skip.",
             color=discord.Color.green()
         )
 
@@ -707,6 +735,7 @@ class QuizGame(commands.Cog):
         self.round_active = False
         self.accusation_open = True
         self.accusation_votes = {}
+        self.accusation_start_time = datetime.now()
 
         if self.accusation_task:
             self.accusation_task.cancel()
@@ -718,11 +747,52 @@ class QuizGame(commands.Cog):
     
     async def end_accusation_period(self):
         """Automatically end accusation period after timer"""
-        await asyncio.sleep(self.accusation_time)
+        # Send reminder at 15 seconds left
+        await asyncio.sleep(max(0, self.accusation_time - 15))
+        
+        if self.accusation_open:
+            reminder_embed = discord.Embed(
+                title="⏰ Accusation Reminder",
+                description="Only **15 seconds left** in the accusation period! Use `/accuse <player>` to vote now or the period will end.",
+                color=discord.Color.orange()
+            )
+            if hasattr(self, '_last_channel'):
+                await self._last_channel.send(embed=reminder_embed)
+        
+        # Wait for remaining time
+        await asyncio.sleep(15)
+        
         if self.accusation_open:
             self.accusation_open = False
             self.accusation_task = None
-            await self.start_next_round(self._last_channel)
+            
+            # If there were votes, show the final vote counts
+            if self.accusation_votes:
+                vote_counts = {}
+                for voted_user_id in self.accusation_votes.values():
+                    vote_counts[voted_user_id] = vote_counts.get(voted_user_id, 0) + 1
+                
+                vote_summary = "\n".join(
+                    f"• **{self.registered_players[uid]['nickname']}**: {count} vote(s)" 
+                    for uid, count in sorted(vote_counts.items(), key=lambda x: x[1], reverse=True)
+                )
+                
+                final_embed = discord.Embed(
+                    title="⏳ Accusation Period Ended",
+                    description=f"No vote reached the required majority.\n\n**Final Vote Count:**\n{vote_summary}\n\n**Next Step:** Type `/ready` to start the next question.",
+                    color=discord.Color.blue()
+                )
+            else:
+                final_embed = discord.Embed(
+                    title="⏳ Accusation Period Ended",
+                    description="No accusations were made. **Next Step:** Type `/ready` to start the next question.",
+                    color=discord.Color.blue()
+                )
+            
+            self.accusation_votes = {}
+            
+            if hasattr(self, '_last_channel'):
+                await self._last_channel.send(embed=final_embed)
     
     
     @app_commands.command(name="status", description="Check if a question is active")
