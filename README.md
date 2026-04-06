@@ -253,7 +253,7 @@ Scores are automatically saved to `scores.json` in the format:
 [Bob]: /accuse Alice
 [Charlie]: /accuse Alice
 [Bot]: 🕵️ Accusation resolved! Alice was the imposter.
-       Alice -5 pts, Bob +5 pts, Charlie +5 pts
+       Alice -3 pts, Bob +3 pts, Charlie +3 pts
        Leaderboard: Bob 6 | Charlie 7 | Alice 0
 ```
 

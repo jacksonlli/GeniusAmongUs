@@ -443,5 +443,209 @@
   { "id": 207, "question": "How many kilometers is the average distance between cities in Europe?", "answer": 50 },
   { "id": 208, "question": "How many grams of sugar are in a typical soft drink?", "answer": 40 },
   { "id": 209, "question": "How many people work at a large university?", "answer": 5000 },
-  { "id": 210, "question": "How many liters of gasoline does the average motorcycle consume per year?", "answer": 100 }
+  { "id": 210, "question": "How many liters of gasoline does the average motorcycle consume per year?", "answer": 100 },
+  {
+    "id": 211,
+    "attraction": "Eiffel Tower",
+    "question": "The Eiffel Tower is repainted every 7 years to prevent it from rusting away. Roughly how many elephants worth of paint are applied to the tower during each refresh?",
+    "answer": "10 elephants",
+    "fun_fact": "It takes about 60 tons of paint to cover the tower. Since an average African elephant weighs about 6 tons, the tower is literally wearing a 'coat' made of 10 elephants!"
+  },
+  {
+    "id": 212,
+    "attraction": "Trevi Fountain",
+    "question": "Rome's Trevi Fountain is a literal gold mine for charity. Based on the daily average of coins tossed in, how many average car payments could you make with just one day's worth of fountain wishes?",
+    "answer": "6 car payments",
+    "fun_fact": "Tourists toss in roughly €3,000 every single day. If an average monthly car payment is around €500, that's enough to pay off 6 cars every 24 hours."
+  },
+  {
+    "id": 213,
+    "attraction": "Great Wall of China",
+    "question": "If you took all the bricks used to build the Ming Dynasty sections of the Great Wall and used them to build a wall 5 feet high around the Earth's equator, how many times would it circle the globe?",
+    "answer": "Once",
+    "fun_fact": "There is enough material in the wall to build a smaller wall that fully encircles the Earth. It remains the largest man-made structure ever built by a long shot."
+  },
+  {
+    "id": 214,
+    "attraction": "The Louvre",
+    "question": "The Louvre is so massive that if you spent only 30 seconds looking at every single piece of art in the museum, how many months would it take you to finish your visit?",
+    "answer": "3 months",
+    "fun_fact": "And that's assuming you don't stop to eat, sleep, or use the restroom! There are approximately 35,000 pieces of art on display at any given time."
+  },
+  {
+    "id": 215,
+    "attraction": "Las Vegas Strip",
+    "question": "Vegas is the brightest spot on Earth from space. If you stayed in a different hotel room on the Las Vegas Strip every single night, how many years would it take to sleep in every room?",
+    "answer": "410 years",
+    "fun_fact": "There are over 150,000 hotel rooms on the Strip. You would need several lifetimes and a very large budget for mini-bars to see them all."
+  },
+  {
+    "id": 216,
+    "attraction": "The Taj Mahal",
+    "question": "The Taj Mahal is famous for its perfect symmetry, but it required a massive workforce to achieve. How many thousands of artisans and laborers were employed to build this 'monument of love'?",
+    "answer": "20 thousand",
+    "fun_fact": "It took 20,000 people and about 1,000 elephants roughly 22 years to complete the complex."
+  },
+  {
+    "id": 217,
+    "attraction": "Disney World (Magic Kingdom)",
+    "question": "The 'utilidors' (underground tunnels) beneath Disney World allow cast members to move unseen. How many football fields could you fit inside this massive hidden basement?",
+    "answer": "7 football fields",
+    "fun_fact": "The tunnels cover about 9 acres. Interestingly, they aren't actually underground; the park was built on top of them because the Florida water table is too high to dig deep!"
+  },
+  {
+    "id": 211,
+    "question": "If you started walking the entire length of the Great Wall of China today and maintained a steady, brisk pace without stopping for food or sleep, how many months would it take you to reach the end?",
+    "answer": "6"
+  },
+  {
+    "id": 212,
+    "question": "If you were to stack every individual stone block used to build the Great Pyramid of Giza in a single vertical column, how many times higher than the International Space Station would that column reach?",
+    "answer": "15"
+  },
+  {
+    "id": 213,
+    "question": "The Tokyo subway system is so famously crowded that they employ 'pushers' to cram people in. To the nearest million, how many people ride the Tokyo rail network every single day?",
+    "answer": "40"
+  },
+  {
+    "id": 214,
+    "question": "How many individual, hand-carved stone statues (Moai) are scattered across the tiny, remote landscape of Easter Island?",
+    "answer": "887"
+  },
+  {
+    "id": 215,
+    "question": "The Palace of Versailles in France was built to be the ultimate display of wealth. How many individual window panes are there in the palace that staff have to keep clean?",
+    "answer": "2153"
+  },
+  {
+    "id": 216,
+    "question": "Times Square in New York City is famous for its bright lights. Roughly how many different LED displays and billboards are competing for your attention in that small junction?",
+    "answer": "50"
+  },
+  {
+    "id": 217,
+    "question": "Mount Everest is the highest point on Earth, but it’s still growing due to tectonic plates pushing upward. Approximately how many millimeters does the mountain grow in height every year?",
+    "answer": "4"
+  },
+  {
+    "id": 218,
+    "question": "If you stood in front of the Mona Lisa and every other individual artwork in the Louvre for just thirty seconds each, how many consecutive days would it take to see everything?",
+    "answer": "100"
+  },
+  {
+    "id": 219,
+    "question": "The Las Vegas Strip is home to some of the largest hotels in the world. If you spent exactly one night in every single hotel room available on the Strip, how many years would it take to finish your stay?",
+    "answer": "410"
+  },
+  {
+    "id": 220,
+    "question": "How many individual lightning bolts, on average, strike the tip of the Empire State Building every year?",
+    "answer": "25"
+  },
+  {
+    "id": 221,
+    "question": "The Hollywood Sign is a global icon, but how many total letters make up the famous landmark?",
+    "answer": "9"
+  },
+  {
+    "id": 222,
+    "question": "How many separate islands make up the tropical tourist paradise of the Maldives?",
+    "answer": "1192"
+  },
+  {
+    "id": 223,
+    "question": "In the famous 'Crossing of the Stones' at the Giant's Causeway in Northern Ireland, roughly how many interlocking basalt columns form the walkway?",
+    "answer": "40000"
+  },
+  {
+    "id": 224,
+    "question": "How many different fountains are currently active and spraying water throughout the city of Rome?",
+    "answer": "2000"
+  },
+  {
+    "id": 225,
+    "question": "The London Eye is one of the world's most popular observation wheels; how many passenger capsules does it have attached to its rim?",
+    "answer": "32"
+  },
+  {
+    "id": 226,
+    "question": "The city of Venice is famous for its winding canals, but how many individual small islands is the city actually built upon?",
+    "answer": "118"
+  },
+  {
+    "id": 227,
+    "question": "If you decided to skip the elevator at the Eiffel Tower and climb the stairs all the way from the ground to the very top platform, how many steps would you have to conquer?",
+    "answer": "1665"
+  },
+  {
+    "id": 228,
+    "question": "The Burj Al Arab in Dubai is one of the tallest and most luxurious hotels in the world, yet it is surprisingly exclusive. How many total guest suites does this massive sail-shaped structure contain?",
+    "answer": "202"
+  },
+  {
+    "id": 229,
+    "question": "Before they were removed due to the structural risk of the bridge collapsing, approximately how many 'love locks' were estimated to be attached to the Pont des Arts in Paris?",
+    "answer": "1000000"
+  },
+  {
+    "id": 230,
+    "question": "The Parthenon in Athens is a masterpiece of ancient Greek engineering. How many massive Doric columns make up the outer peristyle of the temple?",
+    "answer": "46"
+  },
+  {
+    "id": 231,
+    "question": "The Peterhof Palace in Russia is world-renowned for its gravity-fed water displays. How many individual fountains are spread across its enormous lower gardens?",
+    "answer": "150"
+  },
+  {
+    "id": 232,
+    "question": "The Hollywood Walk of Fame adds new stars every year. As of the mid-2020s, to the nearest hundred, how many coral-and-brass stars are embedded in the sidewalk?",
+    "answer": "2700"
+  },
+  {
+    "id": 233,
+    "question": "If you visited the Sagrada Família in Barcelona once it is fully completed, how many total spires will reach toward the sky?",
+    "answer": "18"
+  },
+  {
+    "id": 234,
+    "question": "Central Park in New York City is a massive green space, but it's also a maze of paths. How many unique stone and brick bridges and arches are scattered throughout the park?",
+    "answer": "36"
+  },
+  {
+    "id": 235,
+    "question": "The Great Wall of China is famous for its watchtowers. To the nearest thousand, how many of these towers were built along the Ming Dynasty section of the wall?",
+    "answer": "25000"
+  },
+  {
+    "id": 236,
+    "question": "Buckingham Palace serves as both an office and a home. How many individual rooms are contained within the palace walls?",
+    "answer": "775"
+  },
+  {
+    "id": 237,
+    "question": "The Taj Mahal appears perfectly white from a distance, but the marble is inlaid with precious stones. How many different types of semi-precious and precious stones were used in the inlay work?",
+    "answer": "28"
+  },
+  {
+    "id": 238,
+    "question": "Yellowstone National Park sits on top of a dormant volcano. Roughly how many active geysers can be found within the park's boundaries?",
+    "answer": "500"
+  },
+  {
+    "id": 239,
+    "question": "The Burj Khalifa is the tallest building in the world. How many floors above ground does this skyscraper actually have?",
+    "answer": "163"
+  },
+  {
+    "id": 240,
+    "question": "Santorini, Greece, is famous for its cliffside architecture. How many steps would you have to climb to get from the old port of Fira up to the town at the top of the caldera?",
+    "answer": "588"
+  },
+  {
+    "id": 241,
+    "question": "The Forbidden City in Beijing was the imperial palace for centuries. According to legend, how many rooms does the complex contain?",
+    "answer": "9999"
+  }
 ]

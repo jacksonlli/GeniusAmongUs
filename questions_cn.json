@@ -434,5 +434,45 @@
         "id": 201,
         "question": "九边形有多少条边？",
         "answer": 9
-    }
+    },
+    {
+    "id": 242,
+    "question": "If you wanted to try every single variety of apple that exists in the world by eating one new type every day, how many years would it take to taste them all?",
+    "answer": "20"
+  },
+  {
+    "id": 243,
+    "question": "The world's most expensive spice is saffron, which comes from the stigmas of crocuses. How many individual flowers must be hand-harvested to produce just one pound of the spice?",
+    "answer": "75000"
+  },
+  {
+    "id": 244,
+    "question": "Fortune cookies are a staple of American Chinese dining, but they actually originated in Japan. Roughly how many billion fortune cookies are produced globally each year?",
+    "answer": "3"
+  },
+  {
+    "id": 245,
+    "question": "The Scoville scale measures the heat of peppers. How many times hotter than a standard Jalapeño is a typical Carolina Reaper, the former world record holder for spice?",
+    "answer": "200"
+  },
+  {
+    "id": 246,
+    "question": "McDonald's is the largest toy distributor in the world thanks to Happy Meals. Roughly how many burgers does the chain sell every single second across the globe?",
+    "answer": "75"
+  },
+  {
+    "id": 247,
+    "question": "White chocolate isn't technically chocolate because it contains no cocoa solids. What percentage of a standard white chocolate bar must be cocoa butter to be legally sold as 'chocolate' in the US?",
+    "answer": "20"
+  },
+  {
+    "id": 248,
+    "question": "In a standard 12-ounce can of Coca-Cola, how many individual teaspoons of sugar are dissolved into the drink?",
+    "answer": "10"
+  },
+  {
+    "id": 249,
+    "question": "Fugu (pufferfish) is a dangerous Japanese delicacy that can be lethal if not prepared perfectly. How many years of rigorous training and apprenticeship are typically required for a chef to earn a fugu license?",
+    "answer": "3"
+  }
 ]

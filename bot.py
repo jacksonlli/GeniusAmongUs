@@ -572,7 +572,7 @@ class QuizGame(commands.Cog):
         # Calculate time remaining and votes needed
         time_elapsed = int((datetime.now() - self.accusation_start_time).total_seconds()) if self.accusation_start_time else 0
         time_remaining = max(0, self.accusation_time - time_elapsed)
-        majority_needed = len(self.registered_players) // 2 # + 1
+        majority_needed = len(self.registered_players) // 2 + 1
         current_votes = vote_counts.get(target_user_id, 0)
         votes_needed = majority_needed - current_votes
         
@@ -599,10 +599,10 @@ class QuizGame(commands.Cog):
             imposter_points = None
 
             if accused_role == "imposter":
-                imposter_points = self.adjust_player_points(target_user_id, -5)
+                imposter_points = self.adjust_player_points(target_user_id, -3)
                 for voter, target in self.accusation_votes.items():
                     if target == target_user_id:
-                        voter_points = self.adjust_player_points(voter, 5)
+                        voter_points = self.adjust_player_points(voter, 3)
                         if voter_points >= self.win_threshold:
                             winner_id = voter
 
@@ -632,7 +632,7 @@ class QuizGame(commands.Cog):
             )
 
             if accused_role == "imposter":
-                desc = f"**Correct accusation!** {accused_nickname} was the imposter.\n• Imposter loses 5 points\n• All {len(voters)} voters gain 5 points each\n• A new imposter has been selected\n\n**Updated Leaderboard:**\n{leaderboard}\n\nAccusation period is over! Type `/ready` to start the next question."
+                desc = f"**Correct accusation!** {accused_nickname} was the imposter.\n• Imposter loses 3 points\n• All {len(voters)} voters gain 3 points each\n• A new imposter has been selected\n\n**Updated Leaderboard:**\n{leaderboard}\n\nAccusation period is over! Type `/ready` to start the next question."
             else:
                 desc = f"**Wrong accusation!** {accused_nickname} was not the imposter.\n• Voters ({', '.join(voters)}) lose 2 points each\n\n**Updated Leaderboard:**\n{leaderboard}\n\nAccusation period is over! Type `/ready` to start the next question."
 
@@ -847,7 +847,7 @@ class QuizGame(commands.Cog):
         )
         embed.add_field(
             name="Imposters Rules",
-            value="Imposters see the correct answer but can be accused to lose their imposter status. Accusing correctly earns all voters +5 points and -5 to the imposter, selecting a new imposter. Accusing wrong earns voters -2 points each.",
+            value="Imposters see the correct answer but can be accused to lose their imposter status. Accusing correctly earns all voters +3 points and -3 to the imposter, selecting a new imposter. Accusing wrong earns voters -2 points each.",
             inline=False
         )
 
