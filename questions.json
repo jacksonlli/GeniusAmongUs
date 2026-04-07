@@ -647,5 +647,114 @@
     "id": 241,
     "question": "The Forbidden City in Beijing was the imperial palace for centuries. According to legend, how many rooms does the complex contain?",
     "answer": "9999"
-  }
+  },
+  {
+    "id": 250,
+    "question": "In early 2026, a perfect 'PSA 10' Pikachu Illustrator card set a new world record at auction. To the nearest million, how many US dollars did the buyer pay for this single piece of cardboard?",
+    "answer": "16"
+  },
+  {
+    "id": 251,
+    "question": "The 1933 Double Eagle is currently the most expensive coin ever sold. Due to its 'forbidden' history, only one specimen is legally allowed to be privately owned. To the nearest million, what is its record-breaking price tag?",
+    "answer": "19"
+  },
+  {
+    "id": 252,
+    "question": "Action Comics #1 marks the first appearance of Superman. In 2026, a high-grade copy was sold privately, breaking the record for the most expensive comic book ever. How many millions of dollars was it sold for?",
+    "answer": "15"
+  },
+  {
+    "id": 253,
+    "question": "The British Guiana 1c Magenta is a tiny scrap of paper often called the 'Mona Lisa of stamps.' Despite being just one inch square, how many millions of dollars did it fetch at its most famous auction sale?",
+    "answer": "9"
+  },
+  {
+    "id": 254,
+    "question": "A factory-sealed copy of Super Mario 64 made history by becoming the first video game to ever sell for over a million dollars. To the nearest hundred thousand, how many dollars did the winning bidder pay?",
+    "answer": "1600000"
+  },
+  {
+    "id": 255,
+    "question": "The T206 Honus Wagner is the 'Holy Grail' of baseball cards. Even in poor condition, these cards command astronomical prices. To the nearest million, what is the current record price for a high-grade version of this card?",
+    "answer": "7"
+  },
+  {
+    "id": 256,
+    "question": "In the world of high-end sneakers, a pair of Michael Jordan’s 'Dynasty Collection' Air Jordans (worn during championship games) set a massive record at auction. How many millions of dollars did the set sell for?",
+    "answer": "8"
+  },
+  {
+    "id": 257,
+    "question": "The most expensive musical instrument ever sold is the 'Messiah' Stradivarius violin. Because it is kept in such pristine condition, its estimated value is roughly how many millions of dollars?",
+    "answer": "20"
+  },
+  {
+"id": 258,
+"question": "Montrealers love their bagels, but how many minutes (to the nearest whole number) does it usually take for a fresh batch to boil in honey-water before hitting the wood-fired oven?",
+"answer": 3
+},
+{
+"id": 259,
+"question": "Mount Royal is the city's namesake 'mountain,' but how many distinct summits does this giant hill actually have?",
+"answer": 3
+},
+{
+"id": 260,
+"question": "Quebec is the only province with a walled city north of Mexico. How many kilometers long is the fortification wall surrounding Old Quebec?",
+"answer": 5
+},
+{
+"id": 261,
+"question": "The world's most photographed hotel is the Château Frontenac. If you wanted to stay in every single room, one per night, how many nights would it take you?",
+"answer": 610
+},
+{
+"id": 262,
+"question": "Canada has more lake area than any other country. Roughly what percentage of the entire world's renewable freshwater is contained within our borders?",
+"answer": 20
+},
+{
+"id": 263,
+"question": "The iconic Canadian $1 coin features a bird, but how many sides (facets) does the 'Loonie' actually have?",
+"answer": 11
+},
+{
+"id": 264,
+"question": "Canada is obsessed with its 'Big' roadside attractions. How many meters tall is the 'Big Apple' structure in Colborne, Ontario?",
+"answer": 12
+},{
+      "id": 265,
+      "question": "Montreal is a festival powerhouse! Roughly how many official festivals does the city host every single year?",
+      "answer": 120
+    },
+    {
+      "id": 266,
+      "question": "Saint Joseph's Oratory has a special central staircase for pilgrims. How many wooden steps must they climb on their knees to reach the top?",
+      "answer": 99
+    },
+    {
+      "id": 267,
+      "question": "Quebec is massive. To the nearest whole number, how many times could you fit the entire country of France inside Quebec's borders?",
+      "answer": 3
+    },
+    {
+      "id": 268,
+      "question": "The Montmorency Falls near Quebec City are famous for being tall. How many meters taller are they than the world-famous Niagara Falls?",
+      "answer": 30
+    },
+    {
+      "id": 269,
+      "question": "Canada loves its holes. How many 'zeros' are in the official postal code assigned to Santa Claus at the North Pole?",
+      "answer": 3
+    },
+    {
+      "id": 270,
+      "question": "The Trans-Canada Highway is a long haul. Out of the 13 provinces and territories in Canada, how many does this specific highway actually pass through?",
+      "answer": 10
+    },
+    {
+      "id": 271,
+      "question": "Canada is the 'Doughnut Capital' of the world per capita. Roughly how many doughnut shops are there across the country for every million Canadians?",
+      "answer": 115
+    }
 ]
